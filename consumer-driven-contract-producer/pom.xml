@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.mzielinski.ssoat</groupId>
+        <artifactId>single-source-of-api-truth</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>consumer-driven-contract-producer</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>consumer-driven-contract-producer</name>
+    <description>Consumer Driven Contracts Producer</description>
+
+    <properties>
+        <scc.ao3.version>2.1.2.0</scc.ao3.version>
+        <open-api-generator.version>5.4.0</open-api-generator.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator</artifactId>
+            <version>${open-api-generator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.13.2</version>
+        </dependency>
+
+        <!-- Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>guru.springframework</groupId>
+            <artifactId>spring-cloud-contract-oa3</artifactId>
+            <version>${scc.ao3.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+                <version>2.1.1.RELEASE</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <packageWithBaseClasses>com.mzielinski.cdc</packageWithBaseClasses>
+                    <testFramework>JUNIT5</testFramework>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>guru.springframework</groupId>
+                        <artifactId>spring-cloud-contract-oa3</artifactId>
+                        <version>${scc.ao3.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${open-api-generator.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/test/resources/contracts/api/open-api-cdc.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <modelNameSuffix>Dto</modelNameSuffix>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <configOptions>
+                                <openApiNullable>false</openApiNullable>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <apiPackage>com.mzielinski.cdc.ssot.api</apiPackage>
+                            <modelPackage>com.mzielinski.cdc.ssot.api.model</modelPackage>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.mzielinski.cdc.ProducerApplication</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

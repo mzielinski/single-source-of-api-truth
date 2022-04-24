@@ -1,0 +1,15 @@
+= Consumer-Driven Contract Workshops
+:toc:
+
+* <<docs/HowTo.adoc#, How To Run/Build/Publish?>>
+
+* *Open-API → Single Source of Truth*
+** model + api code
+** contract tests → for producer
+** contract stub → for consumer
+
+* *Demo*
+** Show existing code in repository
+** Show generated code from single Open-API documentation
+** Add author, check if customer can handle it without impact
+** Make breaking change, add author as required parameter on query params

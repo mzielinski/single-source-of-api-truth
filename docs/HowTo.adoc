@@ -1,0 +1,16 @@
+= How To
+:toc:
+
+== How to build and run producer
+
+[source,bash]
+----
+./mvnw -f consumer-driven-contract-producer/pom.xml clean install
+----
+
+== How to build and run consumer
+
+[source,bash]
+----
+./mvnw -f consumer-driven-contract-consumer/pom.xml clean install
+----
